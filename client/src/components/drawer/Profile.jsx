@@ -18,12 +18,12 @@ const BoxWrapper = styled(Box)`
     background: #FFFFFF;
     padding: 12px 30px 2px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    & :first-child {
+    & :first-of-type {
         font-size: 13px;
         color: #009688;
         font-weight: 200;
     }
-    & :last-child {
+    & :last-of-type {
         margin: 14px 0;
         color: #4A4A4A;
     }

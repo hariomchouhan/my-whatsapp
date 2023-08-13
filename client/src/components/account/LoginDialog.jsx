@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import {GoogleLogin} from '@react-oauth/google';
 import jwt_decode from 'jwt-decode';
 import { AccountContext } from '../../context/AccountContext';
+import { addUser } from '../../service/api';
 
 
 const Component = styled(Box)`
@@ -53,9 +54,10 @@ const dialogStyle = {
 const LoginDialog = () => {
 
     const {setAccount} = useContext(AccountContext);
-    const onLoginSuccess = (res) => {
+    const onLoginSuccess = async(res) => {
         const decoded = jwt_decode(res.credential);
         setAccount(decoded);
+        await addUser(decoded);
     }
     const onLoginError = (res) => {
         console.log('Login Failed', res);
