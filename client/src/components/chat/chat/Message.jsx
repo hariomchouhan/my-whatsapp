@@ -2,6 +2,7 @@ import { Box, Typography, styled } from "@mui/material";
 import React, { useContext } from "react";
 import { formatDate } from "../../../utils/CommonUtils";
 import { AccountContext } from "../../../context/AccountContext";
+import ImageMessage from "./ImageMessage";
 
 const Own = styled(Box)`
   background: #dcf8c6;
@@ -42,15 +43,30 @@ const Message = ({ message }) => {
     <>
       {account.sub === message.senderId ? (
         <Own>
-          <Text>{message.text}</Text>
-          <Time>{formatDate(message.createdAt)}</Time>
+          {message.type === "file" ? (
+            <ImageMessage message={message} />
+          ) : (
+            <TextMessage message={message} />
+          )}
         </Own>
       ) : (
         <Wrapper>
-          <Text>{message.text}</Text>
-          <Time>{formatDate(message.createdAt)}</Time>
+          {message.type === "file" ? (
+            <ImageMessage message={message} />
+          ) : (
+            <TextMessage message={message} />
+          )}
         </Wrapper>
       )}
+    </>
+  );
+};
+
+const TextMessage = ({ message }) => {
+  return (
+    <>
+      <Text>{message.text}</Text>
+      <Time>{formatDate(message.createdAt)}</Time>
     </>
   );
 };
