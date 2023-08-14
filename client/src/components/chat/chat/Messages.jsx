@@ -1,5 +1,5 @@
 import { Box, styled } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ChatFooter from "./ChatFooter";
 import { AccountContext } from "../../../context/AccountContext";
 import { getMessages, newMessage } from "../../../service/api";
@@ -16,16 +16,28 @@ const Component = styled(Box)`
 `;
 
 const Container = styled(Box)`
-  padding: 1px 80px;
+  padding: 8px 80px;
 `;
 const Messages = ({ person, conversation }) => {
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState([]);
-  const [newMessageFlag, setNewMessageFlag] = useState(false);
+  
   const [file, setFile] = useState();
   const [image, setImage] = useState("");
+  const [incomingMessage, setIncomingMessage] = useState(null);
 
-  const { account } = useContext(AccountContext);
+  const scrollRef = useRef();
+  const { account, socket, newMessageFlag, setNewMessageFlag } = useContext(AccountContext);
+
+  useEffect(() => {
+    socket.current.on('getMessage', data => {
+      setIncomingMessage({
+        ...data,
+        createdAt: Date.now(),
+      })
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const getMessageDetails = async () => {
     let data = await getMessages(conversation._id);
@@ -36,6 +48,14 @@ const Messages = ({ person, conversation }) => {
     conversation._id && getMessageDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [person._id, conversation._id, newMessageFlag]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ transition: 'smooth' });
+  }, [messages])
+
+  useEffect(() => {
+    incomingMessage && conversation?.members?.includes(incomingMessage.senderId) && setMessages(prev => [...prev, incomingMessage])
+  }, [incomingMessage, conversation])
 
   const sendText = async (e) => {
     const code = e.keyCode || e.which;
@@ -58,6 +78,9 @@ const Messages = ({ person, conversation }) => {
           text: image,
         };
       }
+
+      socket.current.emit('sendMessage', message);
+
       await newMessage(message);
 
       setValue("");
@@ -71,7 +94,7 @@ const Messages = ({ person, conversation }) => {
       <Component>
         {messages &&
           messages.map((message, index) => (
-            <Container key={index}>
+            <Container ref={scrollRef} key={index}>
               <Message message={message} />
             </Container>
           ))}
