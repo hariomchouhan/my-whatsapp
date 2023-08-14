@@ -33,7 +33,7 @@ const InputField = styled(InputBase)`
 const ClipIcon = styled(AttachFile)`
     transform: rotate(40deg)
 `;
-const ChatFooter = () => {
+const ChatFooter = ({ sendText, setValue, value }) => {
   return (
     <Container>
         <EmojiEmotionsOutlinedIcon />
@@ -41,6 +41,9 @@ const ChatFooter = () => {
         <Search>
             <InputField 
             placeholder='Type a message'
+            onChange={(e) => setValue(e.target.value)}
+            onKeyPress={(e) => sendText(e)}
+            value={value}
             />
         </Search>
         <Mic />

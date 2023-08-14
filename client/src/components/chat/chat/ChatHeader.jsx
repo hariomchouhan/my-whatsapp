@@ -1,8 +1,6 @@
 import { MoreVert, Search } from '@mui/icons-material'
 import { Box, Typography, styled } from '@mui/material'
 import React from 'react'
-import { defaultProfilePicture } from '../../../constants/data';
-
 
 const Header = styled(Box)`
     height: 44px;
