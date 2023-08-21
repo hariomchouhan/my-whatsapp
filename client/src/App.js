@@ -7,7 +7,7 @@ import myData from './Data';
 
 function App() {
 
-  const clientId = myData.client_id;
+  const clientId = '530433419031-88uoscl18ukg7dc8vp7va05khbgcuaot.apps.googleusercontent.com';
   return (
     <GoogleOAuthProvider clientId={clientId}>
       <AccountContextProvider>

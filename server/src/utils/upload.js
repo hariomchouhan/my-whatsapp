@@ -5,7 +5,7 @@ const storage = new GridFsStorage({
     url: process.env.DATABASE_URL,
     options: { useUnifiedTopology: true, useNewUrlParser: true },
     file: (request, file) => {
-        const match = ["image/png", "image/jpg", "image/jpeg"];
+        const match = ["image/png", "image/jpg", "image/jpeg", "image/gif"];
 
         if (match.indexOf(file.mimeType) === -1) {
             return `${Date.now()}-file-${file.originalname}`;

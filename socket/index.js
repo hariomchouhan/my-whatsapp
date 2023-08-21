@@ -1,8 +1,10 @@
 import { Server } from 'socket.io';
 
-const io = new Server(9000, {
+const PORT = process.env.SOCKET_SERVER_PORT || 9000;
+
+const io = new Server(PORT, {
     cors: {
-        origin: 'http://localhost:3000'
+        origin: process.env.FRONTED_URL,
     }
 })
 
